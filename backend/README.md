@@ -2,4 +2,4 @@
 
 ## How it works
 
-[Solution Design](https://github.com/Papugs/AI-real-time-translation/tree/main/backend/img/SolutionDesign.png)
+[Solution Design](https://github.com/Papugs/AI-real-time-translation/blob/main/backend/img/SolutionDesign.png?raw=true)
