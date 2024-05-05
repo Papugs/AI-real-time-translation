@@ -1,0 +1,9 @@
+openai-whisper
+setuptools-rust
+deepl
+openai
+pathlib
+os
+
+
+ffmpeg (package manager install)
