@@ -4,6 +4,18 @@ deepl
 openai
 pathlib
 os
+deepgram-sdk
+python-env
+google-cloud-speech
+google-api-python-client
+simpleaudio
+sounddevice
+scipy
+ffmpeg-python
+pyaudio
+pydub
+pygame
+soundfile
+python-vlc
 
-
-ffmpeg (package manager install)
+#ffmpeg (package manager install)

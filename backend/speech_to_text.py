@@ -1,22 +1,33 @@
 import whisper
 import os
-from dotenv import load_dotenv
-
-from deepgram import (
-    DeepgramClient,
-    PrerecordedOptions,
-    FileSource,
-)
-
-API_KEY = "a29bd8d1c5f9742372c2350b1fcbd10ee55f68d9"
+import argparse
+from google.cloud import speech
 
 
-def speech_to_text(file_name):
+def speech_to_text(file_name, lang_code):
+    """Transcribe the given audio file."""
+    client = speech.SpeechClient.from_service_account_file("backend/key.json")
+
+    with open('backend/audioFiles/'+file_name+'.wav', "rb") as audio_file:
+        content = audio_file.read()
+
+    audio = speech.RecognitionAudio(content=content)
+
+    config = speech.RecognitionConfig(
+        sample_rate_hertz=16000,
+        language_code=str(lang_code),
+    )
+    response = client.recognize(config=config, audio=audio)
+
+    return response.results[0].alternatives[0].transcript
+
+
+def language_code(file_name):
 
     model = whisper.load_model("base")
 
     # load audio and pad/trim it to fit 30 seconds
-    audio = whisper.load_audio(file_name)
+    audio = whisper.load_audio('backend/audioFiles/'+file_name+'.wav')
     audio = whisper.pad_or_trim(audio)
 
     # make log-Mel spectrogram and move to the same device as the model
@@ -24,41 +35,4 @@ def speech_to_text(file_name):
 
     # detect the spoken language
     _, probs = model.detect_language(mel)
-    print(f"Detected language: {max(probs, key=probs.get)}")
-
-    # decode the audio
-    options = whisper.DecodingOptions()
-    print(11)
-    result = whisper.decode(model, mel, options)
-    print(12)
-
-    # print the recognized text
-    return result.text
-
-
-def speech_to_text_dg(file_name):
-    try:
-        # STEP 1 Create a Deepgram client using the API key
-        deepgram = DeepgramClient(API_KEY)
-
-        with open(file_name, "rb") as file:
-            buffer_data = file.read()
-
-        payload: FileSource = {
-            "buffer": buffer_data,
-        }
-
-        #STEP 2: Configure Deepgram options for audio analysis
-        options = PrerecordedOptions(
-            model="nova-2",
-            smart_format=True,
-        )
-
-        # STEP 3: Call the transcribe_file method with the text payload and options
-        response = deepgram.listen.prerecorded.v("1").transcribe_file(payload, options)
-
-        # STEP 4: Print the response
-        print(response.to_json(indent=4))
-
-    except Exception as e:
-        print(f"Exception: {e}")
+    return max(probs, key=probs.get)
