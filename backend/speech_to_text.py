@@ -3,10 +3,10 @@ import os
 import argparse
 from google.cloud import speech
 
+client = speech.SpeechClient.from_service_account_file("backend/key.json")
 
 def speech_to_text(file_name, lang_code):
     """Transcribe the given audio file."""
-    client = speech.SpeechClient.from_service_account_file("backend/key.json")
 
     with open('backend/audioFiles/'+file_name+'.wav', "rb") as audio_file:
         content = audio_file.read()
@@ -14,12 +14,15 @@ def speech_to_text(file_name, lang_code):
     audio = speech.RecognitionAudio(content=content)
 
     config = speech.RecognitionConfig(
-        sample_rate_hertz=16000,
+        sample_rate_hertz=48000,
         language_code=str(lang_code),
     )
     response = client.recognize(config=config, audio=audio)
-
-    return response.results[0].alternatives[0].transcript
+    if response.results:
+        if response.results[0]:
+            if response.results[0].alternatives:
+                if response.results[0].alternatives[0]:
+                    return response.results[0].alternatives[0].transcript
 
 
 def language_code(file_name):

@@ -1,6 +1,9 @@
 import pyaudio
 import wave
 
+
+
+
 def record_audio(filename, record_seconds=5):
   """Records audio from microphone and saves as 16-bit PCM WAV.
 
@@ -11,16 +14,15 @@ def record_audio(filename, record_seconds=5):
 
   FORMAT = pyaudio.paInt16  # 16-bit linear PCM
   CHANNELS = 1  # Mono
-  RATE = 16000  # Sample rate in Hz
+  RATE = 48000  # Sample rate in Hz
   CHUNK = 1024  # Buffer size in bytes
 
   audio = pyaudio.PyAudio()
+  print("Recording...")
 
   # Start recording stream
   stream = audio.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK)
   frames = []
-
-  print("Recording...")
 
   for i in range(0, int(RATE / CHUNK * record_seconds)):
     data = stream.read(CHUNK)
