@@ -3,7 +3,7 @@ from openai import OpenAI
 import openai
 
 def text_to_speech(text, num):
-    api_key = "sk-proj-GXn89aJrbsBYXtLdydcsT3BlbkFJPdo1D76HpFf2kuU611XO"
+    api_key = "API-KEY
     client = OpenAI(api_key=api_key)
     client.api_key = api_key
     speech_file_path = Path(__file__).parent / str("audioFiles/Result"+str(num)+".mp3")

@@ -1,6 +1,6 @@
 import openai
 
-api_key = "sk-proj-GXn89aJrbsBYXtLdydcsT3BlbkFJPdo1D76HpFf2kuU611XO"
+api_key = "API-KEY"
 
 def predict_sentence(text_so_far):
     # Set API key
